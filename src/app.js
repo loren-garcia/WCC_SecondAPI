@@ -4,7 +4,7 @@ const instanciaDB = require('./DB');
 
 (async () => {
     try{
-        await instanciaDB.sync({ force: true });
+        await instanciaDB.sync(); // await instanciaDB.sync({ force: true });
         
         app = configExpress();
         app.listen(config.get('api.port'), () => {

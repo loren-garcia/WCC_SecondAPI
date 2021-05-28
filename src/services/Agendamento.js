@@ -61,6 +61,25 @@ class Agendamento {
         if(result == 0) throw new Error('Agendamento inexistente');
 
     }
+
+    async atualizar() {
+        await sequelizeAgendamentos.buscarPorPK(this.id);
+        const camposAtualizaveis = ['nome_cliente', 'nome_servico', 'status', 'data_agendamento'];
+        const dadosAtualizar = {};
+
+        camposAtualizaveis.forEach(campo => {
+            const valor = this[campo];
+            if(typeof valor === 'string' && valor.length > 0) {
+                dadosAtualizar[campo] = valor;
+            }
+        });
+
+        if(Object.keys(dadosAtualizar).length === 0) {
+            throw new Error('Dados não informados');
+        }
+
+        await sequelizeAgendamentos.atualizar(this.id, dadosAtualizar);
+    }
 }
 
 module.exports = Agendamento;

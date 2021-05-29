@@ -1,5 +1,8 @@
 const sequelizeAgendamentos = require('../models/SequelizeAgendamento');
 const moment = require('moment');
+const CampoInvalido = require('../errors/CampoInvalido');
+const NaoEncontrado = require('../errors/NaoEncontrado');
+const DadosNaoInformados = require('../errors/DadosNaoInformados');
 
 class Agendamento {
 
@@ -38,16 +41,14 @@ class Agendamento {
     }
 
     validar() {
-        const camposObrigatorios = [
-            'nome_cliente', 'nome_servico', 'status', 'data_agendamento'
-        ];
+        const camposObrigatorios = ['nome_cliente', 'nome_servico', 'status', 'data_agendamento'];
         const hoje = moment().format('YYYY-MM-DD');
 
         camposObrigatorios.forEach((campo) => {
             const valor = this[campo];
 
             if(typeof valor !== 'string' || valor.length === 0) {
-                throw new Error('Campo inválido');
+                throw new CampoInvalido(campo);
             }
             if(campo == 'data_agendamento' && !moment(valor).isSameOrAfter(hoje)) {
                 throw new Error('Data inválida');
@@ -58,7 +59,7 @@ class Agendamento {
     async remover() {
         const result = await sequelizeAgendamentos.deletar(this.id);
 
-        if(result == 0) throw new Error('Agendamento inexistente');
+        if(result == 0) throw new NaoEncontrado('Agendamento inexistente');
 
     }
 
@@ -75,7 +76,7 @@ class Agendamento {
         });
 
         if(Object.keys(dadosAtualizar).length === 0) {
-            throw new Error('Dados não informados');
+            throw new DadosNaoInformados();
         }
 
         await sequelizeAgendamentos.atualizar(this.id, dadosAtualizar);

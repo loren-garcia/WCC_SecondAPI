@@ -1,4 +1,5 @@
 const TabelaAgendamento = require('./TabelaAgendamento');
+const NaoEncontrado = require('../errors/NaoEncontrado');
 
 module.exports = {
 
@@ -15,6 +16,11 @@ module.exports = {
     async buscarPorPK(id) { // primary key
         try {
             result = await TabelaAgendamento.findByPk(id);
+
+            if(!result) {
+                throw new NaoEncontrado('agendamento');
+            }
+
             return result;
         }catch(error) {
             throw error;

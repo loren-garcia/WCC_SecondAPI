@@ -3,7 +3,7 @@ class CampoQtdMinima extends Error {
         const mensagem = `O campo ${campo} não possui a quantidade mínima de 3 caracteres`;
         super(mensagem);
         this.name = 'CampoQtdMinima';
-        this.idError = 3;
+        this.idError = 8;
     }
 }
 

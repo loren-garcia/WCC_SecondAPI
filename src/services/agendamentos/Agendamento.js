@@ -1,8 +1,10 @@
-const sequelizeAgendamentos = require('../models/SequelizeAgendamento');
+const sequelizeAgendamentos = require('../../models/agendamentos/SequelizeAgendamento');
 const moment = require('moment');
-const CampoInvalido = require('../errors/CampoInvalido');
-const NaoEncontrado = require('../errors/NaoEncontrado');
-const DadosNaoInformados = require('../errors/DadosNaoInformados');
+const CampoInvalido = require('../../errors/CampoInvalido');
+const NaoEncontrado = require('../../errors/NaoEncontrado');
+const DadosNaoInformados = require('../../errors/DadosNaoInformados');
+const CampoQtdMaxima = require('../../errors/CampoQtdMaxima.js');
+const CampoQtdMinima = require('../../errors/CampoQtdMinima.js');
 
 class Agendamento {
 
@@ -52,6 +54,12 @@ class Agendamento {
             }
             if(campo == 'data_agendamento' && !moment(valor).isSameOrAfter(hoje)) {
                 throw new Error('Data inválida');
+            }
+            if(valor.length > 60) {
+                throw new CampoQtdMaxima();
+            }
+            if(valor.length < 8 && campo !== 'nome_cliente' && campo !== 'nome_servico') {
+                throw new CampoQtdMinima();
             }
         })
     }

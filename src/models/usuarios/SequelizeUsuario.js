@@ -1,12 +1,12 @@
-const { removeAllListeners } = require('nodemon');
 const NaoEncontrado = require('../../errors/NaoEncontrado.js');
-const { atualizar } = require('../agendamentos/SequelizeAgendamento.js');
 const TabelaUsuario = require('./TabelaUsuario');
 
 module.exports = {
     async listar() {
-        try{
-            results = await TabelaUsuario.findAll({});
+        try {
+            results = await TabelaUsuario.findAll({
+                raw: true
+            });
             return results;
         } catch(error) {
             throw error;
@@ -14,7 +14,7 @@ module.exports = {
     },
 
     async adicionar(usuario) {
-        try{
+        try {
             result = await TabelaUsuario.create(usuario);
             return result;
         } catch(error) {
@@ -24,7 +24,7 @@ module.exports = {
 
     async buscarPorPK(id) {
         try{
-            usuario = await TabelaUsuario.create(id);
+            usuario = await TabelaUsuario.findByPk(id);
             if(!usuario) throw new NaoEncontrado(Usuário);
             return usuario;
         } catch(error) {
@@ -48,7 +48,7 @@ module.exports = {
 
     async atualizar(id, dados) {
         try {
-            result = await TabelaUsuario.update({
+            result = await TabelaUsuario.update(dados, {
                 where: {
                     id: id
                 }
@@ -61,11 +61,14 @@ module.exports = {
 
     async remover(id) {
         try {
-            result = await TabelaUsuario.remove({
+            result = await TabelaUsuario.destroy({
                 where: {
                     id: id
                 }
             });
+            if(result === 0) {
+                throw new NaoEncontrado('Usuário');
+            }
             return result;
         } catch(error) {
             throw error;

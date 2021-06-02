@@ -1,5 +1,7 @@
 const express = require('express');
 const routesAgendamento = require('../api/agendamentos');
+const routesUsuario = require('../api/usuarios');
+const routerLogin = require('../api/login');
 const formatosValidos = require('../shared/Serializar').FormatosValidos;
 const SerializarErro = require('../shared/Serializar').SerializarErro;
 const CampoQtdMaxima = require('../errors/CampoQtdMaxima');
@@ -31,6 +33,8 @@ module.exports = () => {
 
     app.use(express.json());
     app.use('/api', routesAgendamento);
+    app.use('/api', routesUsuario);
+    app.use('/api', routerLogin);
 
     // função middleware de erro
     app.use((error, req, res, next) => {

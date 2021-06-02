@@ -18,10 +18,10 @@ const columns = {
 
 const sequelizeOptions = {
     freezeTableName: true,
-    tableName: "usuario",
+    tableName: 'usuario',
     timestamps: true,
-    createdAt: "data_criacao",
-    updateAt: "data_atualizacao"
+    createdAt: 'data_criacao',
+    updateAt: 'data_atualizacao'
 };
 
 module.exports = instanciadb.define('usuario', columns, sequelizeOptions);

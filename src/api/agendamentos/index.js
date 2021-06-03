@@ -1,7 +1,8 @@
 const router = require('express').Router();
 const servicoAgendamento = require('../../services/agendamentos');
+const passport = require('passport');
 
-router.get('/agendamentos', servicoAgendamento.carregarTodosAgendamentos);
+router.get('/agendamentos', passport.authenticate('bearer', { session: false }), servicoAgendamento.carregarTodosAgendamentos);
 
 router.get('/agendamentos/:id', servicoAgendamento.carregarAgendamento);
 

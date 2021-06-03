@@ -9,6 +9,7 @@ const CampoQtdMinima = require('../errors/CampoQtdMinima');
 const NaoEncontrado = require('../errors/NaoEncontrado');
 const CampoInvalido = require('../errors/CampoInvalido');
 const FormatoInvalido = require('../errors/FormatoInvalido');
+const passport = require('./autenticacao');
 
 module.exports = () => {
     const app = express();

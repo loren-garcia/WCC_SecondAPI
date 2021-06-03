@@ -1,6 +1,7 @@
 const configExpress = require('./config/configExpress');
 const config = require('config');
 const instanciaDB = require('./DB');
+require('dotenv').config();
 
 (async () => {
     try{

@@ -1,6 +1,7 @@
 const SequelizeUsuario = require('../../models/usuarios/SequelizeUsuario');
 const CampoInvalido = require('../../errors/CampoInvalido');
 const bcrypt = require('bcrypt');
+const DadosNaoInformados = require('../../errors/DadosNaoInformados');
 
 class Usuario {
     constructor({
@@ -17,7 +18,7 @@ class Usuario {
 
     async criar() {
         this.validar();
-        //await this.adicionarSenha();
+        await this.adicionarSenha();
         const result = await SequelizeUsuario.adicionar({
             nome: this.nome,
             email: this.email,
@@ -51,9 +52,13 @@ class Usuario {
         const camposAtualizaveis = ['nome', 'email', 'senha'];
         const dadosAtualizar = {};
 
-        camposAtualizaveis.forEach(campo => {
+        camposAtualizaveis.forEach(async campo => {
             const valor = this[campo];
             if(typeof valor === 'string' && valor.length > 0) {
+                if(campo === 'senha') {
+                    dadosAtualizar[campo] = await this.gerarHash(valor);
+                    return
+                }
                 dadosAtualizar[campo] = valor;
             }
         });
